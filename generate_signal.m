@@ -1,4 +1,4 @@
-function out = generate_signal(method, order, batch, symbols, sps, sym_rate, snr)
+function [sym, out] = generate_signal(method, order, batch, symbols, sps, sym_rate, snr);
 
 % 二阶星座图
 [X2, Y2] = meshgrid([-1, 1], [-1, 1]);
@@ -41,6 +41,8 @@ switch method
         data = randi([0 length(const)-1], batch*symbols, 1);
         %QAM调制
         out = step(mod, data);
+        %调制符号
+        sym = out*max(b);
 
         % 上采样+成型滤波
         out = upfirdn(out, b, sps);
@@ -66,6 +68,9 @@ switch method
         data = randi([0 length(const)-1], batch*symbols, 1);
         %PAM调制
         out = step(mod, data);
+        %调制符号
+        sym = out*max(b);
+        
         % 上采样+成型滤波
         out = upfirdn(out, b, sps);
         %截取数据
@@ -80,6 +85,14 @@ switch method
         data = randi([0 1],batch*symbols*log2(order),1);
         %CPFSK调制
         out = step(mod, data);
+        
+        %重置调制器
+        reset(mod)
+        %取消上采样
+        release(mod)
+        mod.SamplesPerSymbol = 1;
+        %调制符号
+        sym = step(mod, data);
 
     case 'CPM'
         %https://ww2.mathworks.cn/help/comm/ref/comm.cpmmodulator-system-object.html
@@ -90,6 +103,14 @@ switch method
         data = randi([0 1],batch*symbols*log2(order),1);
         %CPM调制
         out = step(mod, data);
+        
+        %重置调制器
+        reset(mod)
+        %取消上采样
+        release(mod)
+        mod.SamplesPerSymbol = 1;
+        %调制符号
+        sym = step(mod, data);
         
     case 'GFSK'
         %https://ww2.mathworks.cn/help/comm/ref/comm.cpmmodulator-system-object.html
@@ -102,6 +123,14 @@ switch method
         data = randi([0 1],batch*symbols,1);
         out = mod(data);
         
+        %重置调制器
+        reset(mod)
+        %取消上采样
+        release(mod)
+        mod.SamplesPerSymbol = 1;
+        %调制符号
+        sym = step(mod, data);
+        
     case 'GMSK'
         %https://ww2.mathworks.cn/help/comm/ref/comm.gmskmodulator-system-object.html
         mod = comm.GMSKModulator('BitInput', true,...
@@ -111,6 +140,14 @@ switch method
         data = randi([0 1],batch*symbols,1);
         %GMSK调制
         out = step(mod, data);
+
+        %重置调制器
+        reset(mod)
+        %取消上采样
+        release(mod)
+        mod.SamplesPerSymbol = 1;
+        %调制符号
+        sym = step(mod, data);
         
     case 'MSK'
         %https://ww2.mathworks.cn/help/comm/ref/comm.mskmodulator-system-object.html
@@ -121,6 +158,14 @@ switch method
         data = randi([0 1],batch*symbols,1);
         %MSK调制
         out = step(mod, data);
+        
+         %重置调制器
+        reset(mod)
+        %取消上采样
+        release(mod)
+        mod.SamplesPerSymbol = 1;
+        %调制符号
+        sym = step(mod, data);
         
     case 'M-FSK'
         %https://ww2.mathworks.cn/help/comm/ref/comm.fskmodulator-system-object.html
@@ -135,6 +180,14 @@ switch method
         data = randi([0 order-1], batch*symbols, 1);
         %MFSK调制
         out = step(mod,data);
+        
+        %重置调制器
+        reset(mod)
+        %取消上采样
+        release(mod)
+        mod.SamplesPerSymbol = 1;
+        %调制符号
+        sym = step(mod, data);
         
     case 'OFDM'
         %https://ww2.mathworks.cn/help/comm/ref/comm.ofdmmodulator-system-object.html
@@ -166,6 +219,9 @@ switch method
         data = reshape(data, blockLen, blockNum);
         %OFDM调制
         out = step(mod,data);
+        %调制符号
+        sym = out*max(b);
+        
         % 上采样+成型滤波
         out = upfirdn(out, b, sps);
         %截取数据
@@ -178,11 +234,14 @@ switch method
         data = randi([0 1], batch*symbols,1);
         %BPSK调制
         out = step(mod, data);
+        %调制符号
+        sym = out*max(b);
+        
          % 上采样+成型滤波
         out = upfirdn(out, b, sps);
         %截取数据
         out = out(1:symbols*sps*batch);
-        
+
     case 'DBPSK'
         %https://ww2.mathworks.cn/help/comm/ref/comm.dbpskmodulator-system-object.html
         mod = comm.DBPSKModulator(pi/4);
@@ -190,6 +249,9 @@ switch method
         data = randi([0 1], batch*symbols,1);
         %DPSK调制
         out = step(mod, data);
+        %调制符号
+        sym = out*max(b);
+        
         % 上采样+成型滤波
         out = upfirdn(out, b, sps);
         %截取数据
@@ -202,6 +264,9 @@ switch method
         data = randi([0 1],batch*symbols*log2(order),1);
         %M-DPSK调制
         out = mod(data);
+        %调制符号
+        sym = out*max(b);
+        
         % 上采样+成型滤波
         out = upfirdn(out, b, sps);
         %截取数据
@@ -214,6 +279,9 @@ switch method
         data = randi([0 order-1],batch*symbols,1);
         %MPSK调制
         out = step(mod,data);
+        %调制符号
+        sym = out*max(b);
+        
         % 上采样+成型滤波
         out = upfirdn(out, b, sps);
         %截取数据
@@ -226,6 +294,9 @@ switch method
         data = randi([0 3],batch*symbols,1);
         %QPSK调制
         out = mod(data);
+        %调制符号
+        sym = out*max(b);
+        
         % 上采样+成型滤波
         out = upfirdn(out, b, sps);
         %截取数据
@@ -238,6 +309,9 @@ switch method
         data = randi([0 1],batch*symbols*log2(4),1);
         %DQPSK调制
         out = mod(data);
+        %调制符号
+        sym = out*max(b);
+        
         % 上采样+成型滤波
         out = upfirdn(out, b, sps);
         %截取数据
@@ -250,6 +324,9 @@ switch method
         data = randi([0 1],batch*symbols*log2(4),1);
         %OQPSK调制
         out = mod(data);
+        %调制符号
+        sym = out*max(b);
+        
         % 上采样+成型滤波
         out = upfirdn(out, b, sps);
         %截取数据
@@ -264,6 +341,9 @@ switch method
         hMod = comm.GeneralQAMTCMModulator(t,...
             'Constellation',exp(pi*1i*[1 2 3 6]/4));
         out = step(hMod,data);
+        %调制符号
+        sym = out*max(b);
+        
         % 上采样+成型滤波
         out = upfirdn(out, b, sps);
         %截取数据
@@ -277,6 +357,9 @@ switch method
         t =  poly2trellis([5 4],[23 35 0; 0 5 13]);
         hMod = comm.PSKTCMModulator(t,'ModulationOrder',8);
         out = step(hMod,data);
+        %调制符号
+        sym = out*max(b);
+        
         % 上采样+成型滤波
         out = upfirdn(out, b, sps);
         %截取数据
@@ -289,11 +372,14 @@ switch method
         %8PSK TCM调制
         hMod = comm.RectangularQAMTCMModulator;
         out = step(hMod,data);
+        %调制符号
+        sym = out*max(b);
+        
         % 上采样+成型滤波
         out = upfirdn(out, b, sps);
         %截取数据
         out = out(1:symbols*sps*batch);
-        
+
     case 'F-OFDM'
         disp('https://ww2.mathworks.cn/help/comm/examples/f-ofdm-vs-ofdm-modulation.html')
         
@@ -308,11 +394,11 @@ switch method
    
 end
 
-%加入随机相位
-phs = -pi + 2*pi*rand(batch,1);
-phs = repmat(phs, symbols*sps, 1);
-phs = phs(:);
-out = out.*exp(1i*phs);
+% %加入随机相位
+% phs = -pi + 2*pi*rand(batch,1);
+% phs = repmat(phs, symbols*sps, 1);
+% phs = phs(:);
+% out = out.*exp(1i*phs);
 
 %设置信噪比
 hAWGN = comm.AWGNChannel('NoiseMethod', ...
