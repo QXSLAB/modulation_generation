@@ -201,7 +201,7 @@ switch method
             'NumSymbols', blockNum);
         %每个符号所需要的数据量
         modDim = info(mod);
-        blockLen = max(modDim.DataInputSize);
+        blockLen = modDim.DataInputSize(1);
         %选择源数据的调制阶数
         switch order
             case 2

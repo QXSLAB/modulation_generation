@@ -1,5 +1,5 @@
 clear
-batch = 1;
+batch = 50e3;
 symbols = 128;
 sps = 8;
 sym_rate = 1e6;
