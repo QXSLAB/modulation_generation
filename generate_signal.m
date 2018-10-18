@@ -403,8 +403,7 @@ end
 %设置信噪比
 hAWGN = comm.AWGNChannel('NoiseMethod', ...
     'Signal to noise ratio (SNR)', ...
-    'SNR', snr,...
-    'SamplesPerSymbol', sps);
+    'SNR', snr);
 out = step(hAWGN, out);
 
 %变换输出格式
