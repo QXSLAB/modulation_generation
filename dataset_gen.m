@@ -3,7 +3,7 @@ batch = 100e3;
 symbols = 128;
 sps = 8;
 sym_rate = 1e6;
-snr = 50;
+snr = 45;
 %single 4 byte, complex=real+imag
 %size = symbols*sps*batch*4*2/1024/1024/1024;
 
@@ -27,9 +27,9 @@ sprintf('PAM8')
 [~, PAM8] = generate_signal('PAM', 8, batch, symbols, sps, sym_rate, snr);
 PAM8 = single(PAM8);
 
-sprintf('CPFSK2')
-[~, CPFSK2] = generate_signal('CPFSK', 2, batch, symbols, sps, sym_rate, snr);
-CPFSK2 = single(CPFSK2);
+% sprintf('CPFSK2')
+% [~, CPFSK2] = generate_signal('CPFSK', 2, batch, symbols, sps, sym_rate, snr);
+% CPFSK2 = single(CPFSK2);
 
 % sprintf('CPFSK4')
 % [~, CPFSK4] = generate_signal('CPFSK', 4, batch, symbols, sps, sym_rate, snr);
@@ -59,9 +59,9 @@ sprintf('GMSK')
 [~, GMSK] = generate_signal('GMSK', 0, batch, symbols, sps, sym_rate, snr);
 GMSK = single(GMSK);
 
-sprintf('MSK')
-[~, MSK] = generate_signal('MSK', 0, batch, symbols, sps, sym_rate, snr);
-MSK = single(MSK);
+% sprintf('MSK')
+% [~, MSK] = generate_signal('MSK', 0, batch, symbols, sps, sym_rate, snr);
+% MSK = single(MSK);
 
 % sprintf('FSK2')
 % [~, FSK2] = generate_signal('M-FSK', 2, batch, symbols, sps, sym_rate, snr);
@@ -84,6 +84,9 @@ BPSK = single(BPSK);
 % DBPSK = single(DBPSK);
 % 
 
+sprintf('DQPSK')
+[~, DQPSK] = generate_signal('DQPSK', 0, batch, symbols, sps, sym_rate, snr);
+DQPSK = single(DQPSK);
 
 % sprintf('DPSK2')
 % [~, DPSK2] = generate_signal('M-DPSK', 2, batch, symbols, sps, sym_rate, snr);
@@ -113,9 +116,9 @@ sprintf('OQPSK')
 [~, OQPSK] = generate_signal('OQPSK', 0, batch, symbols, sps, sym_rate, snr);
 OQPSK = single(OQPSK);
 
-sprintf('OFDM2')
-[~, OFDM2] = generate_signal('OFDM', 2, batch, symbols, sps, sym_rate, snr);
-OFDM2 = single(OFDM2);
+% sprintf('OFDM2')
+% [~, OFDM2] = generate_signal('OFDM', 2, batch, symbols, sps, sym_rate, snr);
+% OFDM2 = single(OFDM2);
 
 % sprintf('OFDM4')
 % [~, OFDM4] = generate_signal('OFDM', 4, batch, symbols, sps, sym_rate, snr);
