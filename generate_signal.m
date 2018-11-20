@@ -394,11 +394,11 @@ switch method
    
 end
 
-% %加入随机相位
-% phs = -pi + 2*pi*rand(batch,1);
-% phs = repmat(phs, symbols*sps, 1);
-% phs = phs(:);
-% out = out.*exp(1i*phs);
+%加入随机相位
+phs = -pi + 2*pi*rand(batch,1);
+phs = repmat(phs', symbols*sps, 1);
+phs = phs(:);
+out = out.*exp(1i*phs);
 
 %设置信噪比
 hAWGN = comm.AWGNChannel('NoiseMethod', ...

@@ -3,7 +3,7 @@ batch = 100e3;
 symbols = 128;
 sps = 8;
 sym_rate = 1e6;
-snr = 45;
+snr = 5;
 %single 4 byte, complex=real+imag
 %size = symbols*sps*batch*4*2/1024/1024/1024;
 
@@ -128,4 +128,4 @@ OQPSK = single(OQPSK);
 % [~, OFDM8] = generate_signal('OFDM', 8, batch, symbols, sps, sym_rate, snr);
 % OFDM8 = single(OFDM8);
 
-save(sprintf('batch%d_symbols%d_sps%d_baud%d_snr%d.dat', batch, symbols, sps, sym_rate/1e6,snr))
+save(sprintf('phase_noise_batch%d_symbols%d_sps%d_baud%d_snr%d.dat', batch, symbols, sps, sym_rate/1e6,snr))
