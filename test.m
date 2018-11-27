@@ -45,25 +45,8 @@ clear
 close all
 batch = 100e3;
 symbols = 1280;
-sps = 8;
+sps = 2;
 sym_rate = 1e6;
-snr = 10;
+esno = 15;
 
-[~, QPSK] = generate_signal_roll_off('QAM', 4, 1, symbols, sps, sym_rate, snr, 0.3);
-
-
-[~, QPSK] = generate_signal_roll_off('QPSK', 0, 1, symbols, sps, sym_rate, snr, 0.3);
-roff_3 = single(QPSK);
-figure
-plot(roff_3(1,:))
-
-[~, QPSK] = generate_signal_roll_off('QPSK', 0, 1, symbols, sps, sym_rate, snr, 0.5);
-roff_3 = single(QPSK);
-figure
-plot(roff_3(1,:))
-
-
-[~, QPSK] = generate_signal_roll_off('QPSK', 0, 1, symbols, sps, sym_rate, snr, 0.7);
-roff_3 = single(QPSK);
-figure
-plot(roff_3(1,:))
+[~, QPSK] = generate_signal_roll_off('QAM', 2, 1, symbols, sps, sym_rate, esno, 0.3);

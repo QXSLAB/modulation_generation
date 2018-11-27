@@ -1,4 +1,6 @@
-function [sym, out3] = generate_signal(method, order, batch, symbols, sps, sym_rate, snr, roll_off);
+function [sym, out3] = generate_signal(method, order, batch, symbols, sps, sym_rate, esno, roll_off);
+
+snr = esno+10*log10(1/sps);
 
 % 二阶星座图
 [X2, Y2] = meshgrid([-1, 1], [-1, 1]);
@@ -394,31 +396,34 @@ switch method
    
 end
 
-% noise = rand(length(out),1)+1i*rand(length(out),1)-(1+1i)/2;
-% noise = noise/sqrt(mean(abs(noise).^2));
+% noise = wgn(length(out),1,1,'linear','complex');
 % noise_pw = mean(abs(sym).^2)/10^(snr/10);
 % noise = noise*sqrt(noise_pw);
-% out = out+noise;
+% out1 = out+noise;
 
-hAWGN = comm.AWGNChannel('NoiseMethod', ...
-    'Signal to noise ratio (SNR)', ...
-    'SNR', snr);
-out1 = step(hAWGN, out);
+out1 = awgn(out,snr,'measured');
+
+% hAWGN = comm.AWGNChannel('NoiseMethod', ...
+%     'Signal to noise ratio (SNR)', ...
+%     'SNR', snr);
+% out1 = step(hAWGN, out);
 
 % mean(abs(out).^2)/mean(abs(out1-out).^2)
 
-Fs = sps*sym_rate;
-Wc=2*2e6/Fs;                                          %截止频率 1MHz
-[b,a]=butter(4,Wc);
-out1=filter(b,a,out1);
+% Fs = sps*sym_rate;
+% Wc=2*2e6/Fs;                                          %截止频率 1MHz
+% [b,a]=butter(4,Wc);
+% out1=filter(b,a,out1);
 
 
-%加入随机相位
-phs = -pi + 2*pi*rand(batch,1);
-% phs = 0;
-phs = repmat(phs', symbols*sps, 1);
-phs = phs(:);
-out2 = out1.*exp(1i*phs);
+% %加入随机相位
+% phs = -pi + 2*pi*rand(batch,1);
+% % phs = 0;
+% phs = repmat(phs', symbols*sps, 1);
+% phs = phs(:);
+% out2 = out1.*exp(1i*phs);
+
+out2 = out1;
 
 %变换输出格式
 out3 = reshape(out2, symbols*sps, batch);
