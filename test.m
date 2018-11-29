@@ -47,6 +47,6 @@ batch = 100e3;
 symbols = 1280;
 sps = 2;
 sym_rate = 1e6;
-esno = 15;
+esno = 10;
 
 [~, QPSK] = generate_signal_roll_off('QAM', 2, 1, symbols, sps, sym_rate, esno, 0.3);
